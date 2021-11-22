@@ -5,6 +5,12 @@ class Link {
     String shortLink
     Integer redirectCounter
 
+    Link() {
+        if (this.redirectCounter == null) {
+            this.redirectCounter = 0
+        }
+    }
+
     static constraints = {
         originalLink(nullable: false, blank: false)
         shortLink(nullable: false, blank: false)
