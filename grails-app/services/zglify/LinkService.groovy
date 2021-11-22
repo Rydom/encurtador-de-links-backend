@@ -8,19 +8,17 @@ import zglify.base.DefaultService
 @Service(Link)
 abstract class LinkService extends DefaultService {
 
-//    abstract Link get(Serializable id)
-
-//    abstract List<Link> list(Map args)
+/*  abstract Link get(Serializable id)
+    abstract List<Link> list(Map args)
+    abstract void delete(Serializable id)
+    abstract Link save(Link link) */
 
     abstract Long count()
 
-//    abstract void delete(Serializable id)
-
-//    abstract Link save(Link link)
 
     @Transactional
     Link register(Link link) {
-        if (!link.originalLink.contains('http://') || !link.originalLink.contains('https://')) {
+        if (!link.originalLink.contains('http://') && !link.originalLink.contains('https://')) {
             link.originalLink = 'https://' + link.originalLink
         }
         link.shortLink = generateShortLink()
@@ -33,9 +31,22 @@ abstract class LinkService extends DefaultService {
         Link link = Link.createCriteria().get {
             eq('shortLink', shortLink)
         }
-
+        incrementRedirectCounter(link)
         return link?.originalLink
     }
+
+    def getDetails() {
+        Map details = [:]
+        def detailsAux = Link.createCriteria().get {
+            projections {
+                count('id')
+                sum('redirectCounter')
+            }
+        }
+        details.urlEncurtadas = detailsAux[0]
+        details.acessos = detailsAux[1]
+        return details
+     }
 
     private String generateShortLink() {
         def randomUrlLength = 5
@@ -44,4 +55,8 @@ abstract class LinkService extends DefaultService {
         return randomShortUrl
     }
 
+    private incrementRedirectCounter(Link link) {
+        link.redirectCounter += 1
+        save(link)
+    }
 }

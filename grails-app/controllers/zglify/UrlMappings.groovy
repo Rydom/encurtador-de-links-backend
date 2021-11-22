@@ -15,5 +15,6 @@ class UrlMappings {
         "404"(view: '/notFound')
 
         "/$shortLink"(controller: 'link', action: "redirect", method: "GET")
+        "/link/details"(controller: 'link', action: "getDetails", method: "GET")
     }
 }

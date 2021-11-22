@@ -22,13 +22,15 @@ class LinkController {
 
         respond data, view: 'index'
     }
-
+    def getDetails() {
+        def details = linkService.getDetails()
+        respond details
+    }
     def save(Link link) {
         if (link == null) {
             render status: HttpStatus.NOT_FOUND
             return
         }
-
         try {
             linkService.register(link)
         } catch (ValidationException e) {
@@ -39,8 +41,10 @@ class LinkController {
         respond link, [status: HttpStatus.CREATED, view:"show"]
     }
     def redirect() {
+        // TODO incrementar o contador redirectCounter
         String shortLink = params.shortLink
         def originalLink = linkService.getRedirectUrl(shortLink)
+
         if (originalLink == null) {
             Map message = [message: "Não foi possível encontrar o link original"]
             respond message, status: HttpStatus.NOT_FOUND
