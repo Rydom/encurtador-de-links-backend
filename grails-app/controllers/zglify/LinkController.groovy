@@ -11,10 +11,10 @@ class LinkController {
     LinkService linkService
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        params.offSet = 0
-        params.order = 'id'
-        params.sort = 'desc'
+        params.max = params.max ?: Math.min(max ?: 15, 100)
+        params.offSet = params.offSet ?: 0
+        params.order =  params.order ?: 'id'
+        params.sort = params.sort ?: 'desc'
 
         List<Link> links = linkService.list(params)
         def count = linkService.count()
