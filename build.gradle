@@ -28,6 +28,7 @@ repositories {
 
 dependencies {
     runtime 'org.grails.plugins:swagger:1.0.1'
+    runtime "org.postgresql:postgresql:42.2.5"
 
     compile "org.springframework.boot:spring-boot-starter-logging"
     compile "org.springframework.boot:spring-boot-autoconfigure"
